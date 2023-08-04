@@ -1,0 +1,20 @@
+pipeline{
+    agent any
+    stages{
+        stage('git clone'){
+            steps{
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'june-23', url: 'https://github.com/parameshsha/code-file.git']])
+            }
+        }
+        stage('build code'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+        stage('list code'){
+            steps{
+                sh 'ls -l target/'
+            }
+        }
+    }
+}

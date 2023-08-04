@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+        }
+        stages{
+            stage('git clone'){
+                steps{
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'june-23', url: 'https://github.com/parameshsha/code-file.git']])
+                }
+            }
+            stage('test'){
+                steps{
+                    echo "Hello ${params.PERSON}"
+                    echo "Choice: ${params.CHOICE}"
+                }
+            }
+        
+         }
+}

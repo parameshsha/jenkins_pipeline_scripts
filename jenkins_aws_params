@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'branchname', defaultValue: 'develop')
+        }
+        stages{
+            stage('git clone'){
+                steps{
+                    checkout scmGit(branches: [[name: '*/$branchname']], extensions: [], userRemoteConfigs: [[credentialsId: 'june-23', url: 'https://github.com/parameshsha/code-file.git']])
+                }
+            }
+            stage('list of buckets'){
+                steps{
+                    sh '''ls -l
+                    aws s3 ls'''
+                    
+                }
+            }
+            stage('test'){
+                steps{
+                    sh 'mvn clean package'
+                    sh 'ls -l target/'
+                }
+            }
+            stage('build'){
+                steps{
+                   sh 'aws s3 cp target/devops-1.3.0.war s3://myjenkinsbucket1/$JOB_NAME/${branchname}/$BUILD_NUMBER/'
+                }
+            }
+        
+        }
+}

@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('list of buckets') {
+            steps {
+                sh 'aws s3 ls'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'ls -l'
+                sh 'pwd'
+                sh 'whoami'
+            }
+        }
+    }
+}
